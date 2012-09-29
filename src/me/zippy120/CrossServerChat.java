@@ -17,22 +17,48 @@ public class CrossServerChat extends JavaPlugin{
     static final Logger log = Logger.getLogger("Minecraft");
     static CrossServerChat plugin;
     IRCBot bot = new IRCBot(this);
-    Map<Player, Boolean> recieve = new HashMap<Player, Boolean>();
+    Map<String, Boolean> recieve = new HashMap<String, Boolean>();
+    
+    
+    
+    //STOOOOOOOOOOOOFFFFFFFFFFFF
+    public String 
+    
+    
+    $username = "AraeosiaServers";
+    
+    
+    public String
+    
+    
+    $server = "irc.esper.net";
+    
+    
+    public ArrayList<String>
+    
+    
+    $channels = new ArrayList<String>();
+    
+    private void stuff(){
+    	$channels.add("#araeosia-servers");
+    }
+    
+    //END :D
 
     @Override
     public void onEnable(){
+    	stuff();
         log.info("Your plugin has been enabled!");
         log.info("Enabling IRC bot...");
 
+        
+        IRCBot bot = new IRCBot(this);
         // Connect to the IRC server.
         try {
            bot.startBot();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // Join the channel.
-        bot.joinChannel("#araeosia-servers");
 	
     }
 
@@ -47,6 +73,7 @@ public class CrossServerChat extends JavaPlugin{
         bot.sendMessage("#araeosia-servers", message);
     }
     public void sendToServer(String message) {
+    	log.info("IRC: " + message);
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (isRecieveingMessages(p))
                 p.sendMessage(message);
@@ -57,5 +84,27 @@ public class CrossServerChat extends JavaPlugin{
         if(recieve.containsKey(p) && recieve.get(p) == true)
             return true;
         return false;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender,  Command cmd, String commandLabel, String[] args){
+        if (cmd.getName().equalsIgnoreCase("CC")){
+            if (recieve.containsKey(sender)){
+                if (recieve.get(sender) == true){
+                    sender.sendMessage(ChatColor.RED + "Cross-Server chat disabled.");
+                    recieve.put(sender.getName(), false);
+                    return true;
+                } else {
+                    sender.sendMessage(ChatColor.YELLOW + "Cross-Server chat enabled.");
+                    recieve.put(sender.getName(), true);
+                    return true;
+                }
+            } else {
+                sender.sendMessage(ChatColor.YELLOW + "Cross-Server chat enabled.");
+                recieve.put(sender.getName(), true);
+                return true;
+            }
+        }
+        return false;	
     }
 }
