@@ -50,9 +50,7 @@ public class CrossServerChat extends JavaPlugin{
     	stuff();
         log.info("Your plugin has been enabled!");
         log.info("Enabling IRC bot...");
-
         
-        IRCBot bot = new IRCBot(this);
         // Connect to the IRC server.
         try {
             bot.startBot();
