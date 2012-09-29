@@ -31,11 +31,14 @@ public class IRCBot extends PircBot{
         }
 
         // Join the channel.
-
+        
+        
        this.setVerbose(false);
-       
-       // Join the channel.
-       for(String s : plugin.$channels)
-    	   this.joinChannel(s);
+    }
+    
+    @Override
+    public void onConnect(){
+        for(String s : plugin.$channels)
+     	   this.joinChannel(s);
     }
 }
