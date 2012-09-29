@@ -9,7 +9,7 @@ import org.jibble.pircbot.PircBot;
 public class IRCBot extends PircBot{
 	protected CrossServerChat plugin;
 	public IRCBot(){
-		this.setName("DarkHelmetMainBot");
+		this.setName("AraeosiaBot");
 	}
 	
     public void onMessage(String channel, String sender, String login, String hostname, String message){
