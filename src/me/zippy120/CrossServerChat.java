@@ -107,4 +107,5 @@ public class CrossServerChat extends JavaPlugin{
         }
         return false;	
     }
+
 }
