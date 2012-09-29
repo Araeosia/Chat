@@ -35,6 +35,12 @@ public class IRCBot extends PircBot{
        bot.setVerbose(false);
        
        // Join the channel.
-       bot.joinChannel("#araeosia-servers");
+       bot.joinChannel("#araeosia");
+    }
+    
+    @Override
+    public void onConnect(){
+        IRCBot bot = new IRCBot();
+        bot.joinChannel("#araeosia");
     }
 }
