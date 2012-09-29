@@ -12,17 +12,10 @@ public class IRCBot extends PircBot{
 		this.setName("AraeosiaBot");
 	}
 	
-	/**
-	 * 
-	 */
-	@Override
     public void onMessage(String channel, String sender, String login, String hostname, String message){
     	plugin.sendToServer(message);
     }
 
-	/**
-	 * 
-	 */
 	public static void startBot(){
 		
 		IRCBot bot = new IRCBot();
