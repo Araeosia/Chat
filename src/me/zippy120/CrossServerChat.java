@@ -29,9 +29,6 @@ public class CrossServerChat extends JavaPlugin{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // Join the channel.
-        bot.joinChannel("#araeosia-servers");
 	
     }
 
