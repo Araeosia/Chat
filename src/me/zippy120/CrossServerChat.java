@@ -50,9 +50,7 @@ public class CrossServerChat extends JavaPlugin{
     	stuff();
         log.info("Your plugin has been enabled!");
         log.info("Enabling IRC bot...");
-
         
-        IRCBot bot = new IRCBot(this);
         // Connect to the IRC server.
         try {
            bot.startBot();
@@ -70,8 +68,10 @@ public class CrossServerChat extends JavaPlugin{
     }
     public void onPlayerChatEvent(AsyncPlayerChatEvent event){
         String message = event.getFormat() + event.getMessage();
-        bot.sendMessage("#araeosia-servers", message);
+        for(String s : $channels)
+        	bot.sendMessage(s, message);
     }
+    
     public void sendToServer(String message) {
     	log.info("IRC: " + message);
         for (Player p : plugin.getServer().getOnlinePlayers()){
