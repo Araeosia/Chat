@@ -70,8 +70,10 @@ public class CrossServerChat extends JavaPlugin{
     }
     public void onPlayerChatEvent(AsyncPlayerChatEvent event){
         String message = event.getFormat() + event.getMessage();
-        bot.sendMessage("#araeosia-servers", message);
+        for(String s : $channels)
+        	bot.sendMessage(s, message);
     }
+    
     public void sendToServer(String message) {
     	log.info("IRC: " + message);
         for (Player p : plugin.getServer().getOnlinePlayers()){
