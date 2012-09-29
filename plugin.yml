@@ -1,8 +1,0 @@
-name: CrossServerChat
-version: 1.0.0
-main: me.zippy120.CrossServerChat
-
-commands:
-  CC:
-    description: Lets you receive messages from the irc channel
-    usage: /CC
