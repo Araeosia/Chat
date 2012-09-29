@@ -20,9 +20,10 @@ public class IRCBot extends PircBot{
         plugin.sendToServer(message);
     }
     public void startBot(){
+    	
     // Connect to the IRC server.
         try {
-            this.connect(plugin.$username);
+            this.connect(plugin.$server);
         } catch (NickAlreadyInUseException e) {
             e.printStackTrace();
         } catch (IOException e) {
