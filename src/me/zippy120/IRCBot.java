@@ -9,19 +9,19 @@ import org.jibble.pircbot.PircBot;
 public class IRCBot extends PircBot{
     protected CrossServerChat plugin;
     
-    public IRCBot(){
-        this.setName("DarkHelmetMainBot");
+    public IRCBot(CrossServerChat plugin){
+    	this.plugin = plugin;
+        this.setName(plugin.$username);
     }
     
     @Override
     public void onMessage(String channel, String sender, String login, String hostname, String message){
         plugin.sendToServer(message);
     }
-    public static void startBot(){
-        IRCBot bot = new IRCBot();
+    public void startBot(){
     // Connect to the IRC server.
         try {
-            bot.connect("irc.esper.net");
+            this.connect(plugin.$username);
         } catch (NickAlreadyInUseException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -32,9 +32,10 @@ public class IRCBot extends PircBot{
 
         // Join the channel.
 
-       bot.setVerbose(false);
+       this.setVerbose(false);
        
        // Join the channel.
-       bot.joinChannel("#araeosia-servers");
+       for(String s : plugin.$channels)
+    	   this.joinChannel(s);
     }
 }
