@@ -1,6 +1,6 @@
 name: AraeosiaChat
 version: 0.1
-main: net.araeosia.AraeosiaChat
+main: com.araeosia.Chat.AraeosiaChat
 
 commands:
   CC:
