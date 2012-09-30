@@ -17,7 +17,11 @@ public class IRCBot extends PircBot{
     
     @Override
     public void onMessage(String channel, String sender, String login, String hostname, String message){
-        plugin.sendToServer(message);
+    	if(channel.equalsIgnoreCase("#araeosia-servers")){
+    		plugin.sendToServer(plugin.decryptOrSomething(message));
+    	} else {
+    		plugin.sendToServer(message);
+    	}
     }
     public void startBot(){
    

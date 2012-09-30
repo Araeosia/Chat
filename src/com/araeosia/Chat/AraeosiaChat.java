@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -50,18 +51,61 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
         log.info("Disabling IRC bot...");
         bot.disconnect();
     }
+    
+    /**
+     * 
+     * @param e
+     */
     @EventHandler
-    public void onPlayerEvent(AsyncPlayerChatEvent e){
+    public void onPlayerChatEvent(final AsyncPlayerChatEvent e){
         Player player = e.getPlayer();
         String output = player.getDisplayName() + e.getMessage();
         this.debug("#araeosia", "SOMEONE JUST TRIED TO SEND A MESSAGE!");
         for(String s : channels){
             bot.sendMessage(s, output);
-            
+            if(s.equalsIgnoreCase("#araeosia-servers")){
+                bot.sendMessage(s, encryptOrSomething(player, e.getMessage(), false));
+            }
         }
     }
     
-    private void debug(String channel, String msg) {
+    /**
+     * 
+     * @param e
+     */
+    @EventHandler
+    // Todo A better way to do this, or more use for this
+    public void onPlayerCommandPreProccesEvent(final PlayerCommandPreprocessEvent e){
+    	if(e.getMessage().startsWith("/me ")){
+            Player player = e.getPlayer();
+            String output = "* " + player.getDisplayName() + e.getMessage();
+            this.debug("#araeosia", "SOMEONE JUST TRIED TO SEND AN EMOTE!");
+            for(String s : channels){
+                bot.sendMessage(s, output);
+                if(s.equalsIgnoreCase("#araeosia-servers")){
+                    bot.sendMessage(s, encryptOrSomething(player, e.getMessage(), true));
+                }
+            }
+    	}
+    }
+    
+    private String encryptOrSomething(Player player, String message, boolean emote) {
+    	Channel channel = Channel.GLOBAL;
+    	// todo chat channels and stuff
+		return "~" + player.getName() + "~" + player.getWorld().getName() + "~" + channel + "~" + emote + "~" + message;
+	}
+    
+    
+    public String decryptOrSomething(String message){
+    	String[] args = message.split("~");
+    	if(!Boolean.parseBoolean(args[4])){
+    		return "§" + Channel.valueOf(args[3]).getColor() + Channel.valueOf(args[3]).getPrefix() + " " + "§f[§9" + args[2] + "§f " + args[1] + "§f: " + args[5];
+    	} else {
+    		return "* " + args[2] + " " + args[5];
+    	}
+    }
+
+	private void debug(String channel, String msg) {
 		if(debug){
 			if(channel.equals("log")){
 				log.info( "[AraeosiaServers]:" + msg);
