@@ -1,4 +1,4 @@
-package net.araeosia;
+package com.araeosia.Chat;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
 
 public class AraeosiaChat extends JavaPlugin implements Listener{
 
@@ -85,7 +86,7 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
             getConfig().set("AraeosiaChat.account.identifyPass", "");
             getConfig().set("AraeosiaChat.technical.version", 0.1);
             getConfig().set("AraeosiaChat.technical.debug", false);
-            String[] list = {};
+            
             getConfig().set("AraeosiaChat.channels", new ArrayList<String>());
             saveConfig();
         }
