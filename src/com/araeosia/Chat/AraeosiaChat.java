@@ -16,7 +16,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class AraeosiaChat extends JavaPlugin implements Listener{
 
     static final Logger log = Logger.getLogger("Minecraft");
-    static AraeosiaChat plugin;
     IRCBot bot = new IRCBot(this);
     Map<String, Boolean> recieve = new HashMap<String, Boolean>();
     
@@ -36,7 +35,7 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
     public void onEnable(){
         loadConfiguration();
         log.info("[AraeosiaChat] Starting up!");
-        plugin.debug("log", "[AraeosiaChat] Debug mode enabled!");
+        this.debug("log", "[AraeosiaChat] Debug mode enabled!");
         try {
             bot.startBot();
         } catch (Exception e) {
@@ -55,7 +54,7 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
     public void onPlayerEvent(AsyncPlayerChatEvent e){
         Player player = e.getPlayer();
         String output = player.getDisplayName() + e.getMessage();
-        plugin.debug("#araeosia", "SOMEONE JUST TRIED TO SEND A MESSAGE!");
+        this.debug("#araeosia", "SOMEONE JUST TRIED TO SEND A MESSAGE!");
         for(String s : channels){
             bot.sendMessage(s, output);
             
@@ -76,7 +75,7 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
 
 	public void sendToServer(String message) {
     	log.info("IRC: " + message);
-        for (Player p : plugin.getServer().getOnlinePlayers()){
+        for (Player p : this.getServer().getOnlinePlayers()){
             if (isRecieveingMessages(p))
                 p.sendMessage(message);
         }	
@@ -118,12 +117,12 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
         if (cmd.getName().equalsIgnoreCase("CC")){
             if (recieve.containsKey(sender) && recieve.get(sender) == true){
                 sender.sendMessage(ChatColor.RED + "Cross-Server chat disabled.");
-                plugin.debug("log", sender.getName() + " Disabled Cross-Server Chat");
+                this.debug("log", sender.getName() + " Disabled Cross-Server Chat");
                 recieve.put(sender.getName(), false);
                 return true;
             } else {
                 sender.sendMessage(ChatColor.GREEN + "Cross-Server chat enabled.");
-                plugin.debug("log", sender.getName() + " Enabled Cross-Server Chat");
+                this.debug("log", sender.getName() + " Enabled Cross-Server Chat");
                 recieve.put(sender.getName(), true);
                 return true;
             }
