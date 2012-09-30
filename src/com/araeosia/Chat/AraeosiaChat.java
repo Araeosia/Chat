@@ -126,9 +126,9 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
 	private void debug(String channel, String msg) {
 		if(debug){
 			if(channel.equals("log")){
-				log.info( "[AraeosiaServers]:" + msg);
+				log.info( "[AraeosiaServers]: " + msg);
 			}
-			else{
+			else {
 				bot.sendMessage(channel, msg);
 			}
 		}
