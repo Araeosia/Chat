@@ -36,7 +36,7 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
     public void onEnable(){
         loadConfiguration();
         log.info("[AraeosiaChat] Starting up!");
-        if(debug){ log.info("[AraeosiaChat] Debug mode enabled!"); }
+        plugin.debug("log", "[AraeosiaChat] Debug mode enabled!");
         try {
             bot.startBot();
         } catch (Exception e) {
@@ -55,13 +55,26 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
     public void onPlayerEvent(AsyncPlayerChatEvent e){
         Player player = e.getPlayer();
         String output = player.getDisplayName() + e.getMessage();
+        plugin.debug("#araeosia", "SOMEONE JUST TRIED TO SEND A MESSAGE!");
         for(String s : channels){
             bot.sendMessage(s, output);
-            bot.sendMessage("#araeosia", "SOMEONE JUST TRIED TO SEND A MESSAGE!");
+            
         }
     }
     
-    public void sendToServer(String message) {
+    private void debug(String channel, String msg) {
+		if(debug){
+			if(channel.equals("log")){
+				log.info( "[AraeosiaServers]:" + msg);
+			}
+			else{
+				bot.sendMessage(channel, msg);
+			}
+		}
+		
+	}
+
+	public void sendToServer(String message) {
     	log.info("IRC: " + message);
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (isRecieveingMessages(p))
@@ -103,18 +116,14 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
     @Override
     public boolean onCommand(CommandSender sender,  Command cmd, String commandLabel, String[] args){
         if (cmd.getName().equalsIgnoreCase("CC")){
-            if (recieve.containsKey(sender)){
-                if (recieve.get(sender) == true){
-                    sender.sendMessage(ChatColor.RED + "Cross-Server chat disabled.");
-                    recieve.put(sender.getName(), false);
-                    return true;
-                } else {
-                    sender.sendMessage(ChatColor.YELLOW + "Cross-Server chat enabled.");
-                    recieve.put(sender.getName(), true);
-                    return true;
-                }
+            if (recieve.containsKey(sender) && recieve.get(sender) == true){
+                sender.sendMessage(ChatColor.RED + "Cross-Server chat disabled.");
+                plugin.debug("log", sender.getName() + " Disabled Cross-Server Chat");
+                recieve.put(sender.getName(), false);
+                return true;
             } else {
-                sender.sendMessage(ChatColor.YELLOW + "Cross-Server chat enabled.");
+                sender.sendMessage(ChatColor.GREEN + "Cross-Server chat enabled.");
+                plugin.debug("log", sender.getName() + " Enabled Cross-Server Chat");
                 recieve.put(sender.getName(), true);
                 return true;
             }
