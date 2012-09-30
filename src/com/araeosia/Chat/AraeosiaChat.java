@@ -1,5 +1,9 @@
 package com.araeosia.Chat;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -32,6 +36,7 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
     public String DBurl;
     public String DBuser;
     public String DBpassword;
+    public Connection conn;
     
 
     @Override
@@ -44,6 +49,11 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+            databaseInit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 	
     }
 
@@ -52,6 +62,11 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
         log.info("Your plugin has been disabled.");
         log.info("Disabling IRC bot...");
         bot.disconnect();
+        try{ // Close the database connection.
+            conn.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
     @EventHandler
     public void onPlayerEvent(AsyncPlayerChatEvent e){
@@ -136,5 +151,12 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
             }
         }
         return false;	
+    }
+    public void databaseInit() throws SQLException{
+        conn = DriverManager.getConnection(DBurl, DBuser, DBpassword);
+        PreparedStatement QueryStatement = conn.prepareStatement("YOUR QUERY");
+        QueryStatement.executeUpdate();
+        QueryStatement.close();
+        
     }
 }
