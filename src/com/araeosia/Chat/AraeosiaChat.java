@@ -1,5 +1,6 @@
 package com.araeosia.Chat;
 
+import com.araeosia.Chat.utils.Channels;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -39,12 +40,15 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
 	public String DBpassword;
 	public Connection conn;
 	
+	public LinkedHashMap<String,Channel> chatChannels;
+	
 
 	@Override
 	public void onEnable(){
 		loadConfiguration();
-		log.info("[AraeosiaChat] Starting up!");
 		this.debug("log", "[AraeosiaChat] Debug mode enabled!");
+		this.debug("log", "[AraeosiaChat] Populating chatChannels!");
+		chatChannels.put("A", new Channels("[A]", "Araeosia", false, false));
 		try {
 			bot.startBot();
 		} catch (Exception e) {
@@ -108,7 +112,7 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
 	}
 	
 	private String encryptOrSomething(Player player, String message, boolean emote) {
-		Channel channel = Channel.GLOBAL;
+		String channel = "A";
 		// todo chat channels and stuff
 		return "~" + player.getName() + "~" + player.getWorld().getName() + "~" + channel + "~" + emote + "~" + message;
 	}
@@ -118,7 +122,7 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
 		String[] args = message.split("§");
 		String output;
 		if(!Boolean.parseBoolean(args[4])){
-			output = "§" + Channel.valueOf(args[3]).getColor() + Channel.valueOf(args[3]).getPrefix() + " " + "§f[§9" + args[2] + "§f " + args[1] + "§f: " + args[5];
+			//output = "§" + Channel.valueOf(args[3]).getColor() + Channel.valueOf(args[3]).getPrefix() + " " + "§f[§9" + args[2] + "§f " + args[1] + "§f: " + args[5];
 		} else {
 			output = "* " + args[2] + " " + args[5];
 		}
