@@ -30,6 +30,9 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
     public String identifyPass;
     public String password;
     public boolean debug=false;
+    public String DBurl;
+    public String DBuser;
+    public String DBpassword;
     
 
     @Override
@@ -99,7 +102,9 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
             getConfig().set("AraeosiaChat.account.identifyPass", "");
             getConfig().set("AraeosiaChat.technical.version", 0.1);
             getConfig().set("AraeosiaChat.technical.debug", false);
-            
+            getConfig().set("AraeosiaChat.database.url", "jdbc:mysql://localhost:3306/minecraft");
+            getConfig().set("AraeosiaChat.database.user", "minecraft");
+            getConfig().set("AraeosiaChat.database.password", "");
             getConfig().set("AraeosiaChat.channels", new ArrayList<String>());
             saveConfig();
         }
@@ -111,6 +116,9 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
         identify = getConfig().getBoolean("AraeosiaChat.account.identify");
         identifyPass = getConfig().getString("AraeosiaChat.account.identifyPass");
         debug = getConfig().getBoolean("AraeosiaChat.technical.debug");
+        DBurl = getConfig().getString("AraeosiaChat.database.url");
+        DBuser = getConfig().getString("AraeosiaChat.database.user");
+        DBpassword = getConfig().getString("AraeosiaChat.database.password");
     }
 
     @Override
