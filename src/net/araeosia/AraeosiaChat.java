@@ -34,6 +34,7 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
     @Override
     public void onEnable(){
         loadConfiguration();
+        getServer().getPluginManager().registerEvents(this,this);
         log.info("[AraeosiaChat] Starting up!");
         if(debug){ log.info("[AraeosiaChat] Debug mode enabled!"); }
         try {
@@ -53,19 +54,18 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
     @EventHandler
     public void onPlayerEvent(AsyncPlayerChatEvent e){
         Player player = e.getPlayer();
-        String output = player.getDisplayName() + e.getMessage();
+        String output = player.getDisplayName() + ": " + e.getMessage();
         for(String s : channels){
             bot.sendMessage(s, output);
-            bot.sendMessage("#araeosia", "SOMEONE JUST TRIED TO SEND A MESSAGE!");
         }
     }
     
     public void sendToServer(String message) {
     	log.info("IRC: " + message);
-        for (Player p : plugin.getServer().getOnlinePlayers()){
-            if (isRecieveingMessages(p))
-                p.sendMessage(message);
-        }	
+        for (Player p : getServer().getOnlinePlayers()){
+            log.info("Player: " + p.getDisplayName());
+            p.sendMessage(message);
+        }
     }
 
     private boolean isRecieveingMessages(Player p) {
@@ -119,5 +119,16 @@ public class AraeosiaChat extends JavaPlugin implements Listener{
             }
         }
         return false;	
+    }
+    private String compressLine(String channel, Player sender, String message, String world, boolean me){
+        String output = "";
+        return output;
+    }
+    public void handleMessage(String compressedMessage){
+        //data = new String[10];
+        compressedMessage.split("§");
+        for (Player p : getServer().getOnlinePlayers()){
+            
+        }
     }
 }

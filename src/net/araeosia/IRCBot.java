@@ -17,7 +17,8 @@ public class IRCBot extends PircBot{
     
     @Override
     public void onMessage(String channel, String sender, String login, String hostname, String message){
-        plugin.sendToServer(message);
+        String output = sender + ": " + message;
+        plugin.sendToServer(output);
     }
     public void startBot(){
    
