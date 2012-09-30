@@ -1,6 +1,6 @@
-name: CrossServerChat
-version: 1.0.0
-main: me.zippy120.CrossServerChat
+name: AraeosiaChat
+version: 0.1
+main: net.araeosia.AraeosiaChat
 
 commands:
   CC:
