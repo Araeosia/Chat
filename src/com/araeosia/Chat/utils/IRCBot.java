@@ -1,4 +1,4 @@
-package com.araeosia.Chat;
+package com.araeosia.Chat.utils;
 
 import java.io.IOException;
 
@@ -6,6 +6,9 @@ import java.io.IOException;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
+
+import com.araeosia.Chat.AraeosiaChat;
+import com.araeosia.Chat.MessageHandler;
 
 public class IRCBot extends PircBot{
 	protected AraeosiaChat plugin;
@@ -18,7 +21,7 @@ public class IRCBot extends PircBot{
 	@Override
 	public void onMessage(String channel, String sender, String login, String hostname, String message){
 		if(channel.equalsIgnoreCase("#araeosia-servers")){
-			plugin.sendToServer(message);
+			plugin.sendToServer(MessageHandler.handleMessage(message));
 		} else {
 			plugin.sendToServer(message);
 		}
@@ -35,7 +38,9 @@ public class IRCBot extends PircBot{
 				AraeosiaChat.log.severe("[AraeosiaChat] Cannot connect to server! Either username, host, or nick wasn't set!");
 			}
 		} catch (NickAlreadyInUseException e) {
-			e.printStackTrace();
+			plugin.nick += "_";
+			AraeosiaChat.log.severe("Nickname Already In Use; Appending An '_'");
+			startBot();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (IrcException e) {
