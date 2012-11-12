@@ -1,66 +1,46 @@
 package com.araeosia.Chat.utils;
 
-/**
- * 
- * @author Daniel, Bruce
- *
- */
-public enum Channel {
-	
-	
-	Araeosia("[A]", "Araeosia", false, false);
-	//todo
+import java.util.ArrayList;
+
+public class Channel {
 	
 	
 	private String prefix;
 	private String name;
 	private boolean isPrivate;
 	private boolean isStaff;
+	private boolean isLeaveable;
+	private ArrayList<Chatter> chatters = new ArrayList<>();
 	
-	/**
-	 * 
-	 * @param prefix
-	 * @param name
-	 * @param isPrivate
-	 * @param isStaff
-	 */
-	private Channel(String prefix, String name, boolean isPrivate, boolean isStaff) {
+	public Channel(String prefix, String name, boolean isPrivate, boolean isStaff, boolean isLeaveable) {
 		this.prefix = prefix;
 		this.name = name;
 		this.isPrivate = isPrivate;
 		this.isStaff = isStaff;
+		this.isLeaveable = isLeaveable;
 	}
 	
-	/**
-	 * 
-	 * @return prefix
-	 */
 	public String getPrefix() {
 		return prefix;
 	}
 	
-	/**
-	 * 
-	 * @return name
-	 */
 	public String getName() {
 		return name;
 	}
 	
-	/**
-	 * 
-	 * @return isPrivate
-	 */
 	public boolean isPrivate() {
 		return isPrivate;
 	}
 	
-	/**
-	 * 
-	 * @return isStaff
-	 */
 	public boolean isStaff() {
 		return isStaff;
 	}
 	
+	public boolean isLeaveable() {
+		return isLeaveable;
+	}
+	
+	public ArrayList<Chatter> getChatters(){
+		return chatters;
+	}
 }
