@@ -1,4 +1,64 @@
-/nbproject/private/
+# Taken from SpoutDev/Spout by advice of Xu_R #
+# Compiled source #
+###################
+bin
+lib
+out
+target
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Git #
+#######
+.git
+
+# Packages #
+############
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Project files #
+#################
+.classpath
+.externalToolBuilders
+.project
+.settings
+MANIFEST.MF
+
+# Netbeans files #
+##################
+build
+dist
+nbproject
 build.xml
-manifest.mf
-/nbproject/*
+nb-configuration.xml
+
+# IntelliJ IDEA files #
+#######################
+.idea
+*.iml
+*.ipr
+*.iws
