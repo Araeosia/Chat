@@ -1,0 +1,8 @@
+name: AraeosiaChat
+version: 0.1
+main: com.araeosia.Chat.AraeosiaChat
+
+commands:
+  CC:
+    description: Lets you receive messages from the irc channel
+    usage: /CC
