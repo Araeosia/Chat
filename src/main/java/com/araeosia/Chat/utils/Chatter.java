@@ -14,11 +14,20 @@ public class Chatter {
 		channels = new ArrayList<>();
 		mutes = new ArrayList<>();
 	}
+	public String getName() {
+		return name;
+	}
 	public void setChannel(Channel c){
 		this.currentChannel = c;
 	}
 	public void setChannels(ArrayList<Channel> channels){
 		this.channels = channels;
+	}
+	public Channel getCurrentChannel(){
+		return currentChannel;
+	}
+	public String getDisplayName(){
+		return name;
 	}
 	public void setGMuted(boolean gMuted){
 		this.gMuted = gMuted;

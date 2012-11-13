@@ -1,56 +1,45 @@
 package com.araeosia.Chat;
 
 import java.io.IOException;
+import org.pircbotx.Channel;
+import org.pircbotx.PircBotX;
+import org.pircbotx.exception.IrcException;
+import org.pircbotx.hooks.Listener;
+import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.MessageEvent;
 
+public class IRCBot extends ListenerAdapter implements Listener {
 
-import org.jibble.pircbot.IrcException;
-import org.jibble.pircbot.NickAlreadyInUseException;
-import org.jibble.pircbot.PircBot;
+	private AraeosiaChat plugin;
+	private PircBotX bot;
+	private Channel channel;
 
-public class IRCBot extends PircBot{
-	protected AraeosiaChat plugin;
-	
-	public IRCBot(AraeosiaChat plugin){
-	this.plugin = plugin;
-		this.setName(plugin.username);
-	}
-	
-	@Override
-	public void onMessage(String channel, String sender, String login, String hostname, String message){
-		if(channel.equalsIgnoreCase("#araeosia-servers")){
-			plugin.sendToServer(message);
-		} else {
-			plugin.sendToServer(message);
-		}
-	}
-	public void startBot(){
-   
-	// Connect to the IRC server.
+	public IRCBot(AraeosiaChat plugin) {
+		this.plugin = plugin;
+		bot = new PircBotX();
+		bot.setName(plugin.getConfig().getString("AraeosiaChat.account.nick"));
 		try {
-			if(plugin.host!=null && plugin.username!=null && plugin.nick!=null){
-				this.setLogin(plugin.username);
-				this.setName(plugin.nick);
-				this.connect(plugin.host, plugin.port, plugin.password);
-			}else{
-				AraeosiaChat.log.severe("[AraeosiaChat] Cannot connect to server! Either username, host, or nick wasn't set!");
+			bot.connect(plugin.getConfig().getString("AraeosiaChat.network.host"), plugin.getConfig().getInt("AraeosiaChat.network.port"));
+			if(plugin.getConfig().getBoolean("AraeosiaChat.account.identify")){
+				bot.identify(plugin.getConfig().getString("AraeosiaChat.account.identifyPass"));
 			}
-		} catch (NickAlreadyInUseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (IrcException e) {
+			bot.joinChannel(plugin.getConfig().getString("AraeosiaChat.network.channel"));
+			channel = bot.getChannel(plugin.getConfig().getString("AraeosiaChat.network.channel"));
+		} catch (IOException | IrcException e) {
 			e.printStackTrace();
 		}
-	   this.setVerbose(plugin.debug);
 	}
-	
+	public void disconnectIRC(){
+		bot.partChannel(channel, "Shutting down...");
+		bot.disconnect();
+	}
+	public void sendMessage(String s){
+		bot.sendMessage(channel, s);
+	}
 	@Override
-	public void onConnect(){
-		if(plugin.identify){
-			this.identify(plugin.identifyPass);
-		}
-		for(String s: plugin.channels){
-	 		this.joinChannel(s);
+	public void onMessage(MessageEvent event){
+		if(event.getChannel().equals(channel)){
+			plugin.handleMessage(event.getMessage());
 		}
 	}
 }

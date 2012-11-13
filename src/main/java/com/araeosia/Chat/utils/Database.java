@@ -1,52 +1,48 @@
 package com.araeosia.Chat.utils;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import org.bukkit.entity.Player;
+import com.araeosia.Chat.AraeosiaChat;
+import java.sql.*;
+import java.util.ArrayList;
 
 /**
- * 
+ *
  * @author Bruce, Daniel
  */
 public class Database {
-	
-	/**
-	 * 
-	 * @param player
-	 * @return player's Channel
-	 */
-	public static Channel getChannel(Player player){
-		//TODO
-		return Channel.valueOf("Araeosia");
-		/*
-		String channel;
-		try {
-			if (plugin.conn == null || plugin.conn.isClosed()) plugin.dbc();
-            PreparedStatement s = plugin.conn.prepareStatement ("SELECT channel FROM channels WHERE player=? ");
-            s.setString(1, player.getName());
-    		s.executeQuery();
-    		ResultSet rs = s.getResultSet();
-    		channel = rs.first();
-    		rs.close();
-    		s.close();
-            plugin.conn.close();
-            
-            } catch (SQLException e){
-            	e.printStackTrace();
-            }
-		 
-		 try {
-		 	Channel ch = Channel.valueOf(channel);
-		 	return ch
-		 } catch(Exception e){
-		 	e.printStackTrace();
-		 }
-		 return Channel.Araeosia;
-		 
-		 */
+
+	private Connection conn;
+	private AraeosiaChat plugin;
+
+	public Database(AraeosiaChat plugin) {
+		this.plugin = plugin;
+		if (!initDB()) {
+			plugin.log.severe("Could not connect to database! Is it configured properly?");
+			plugin.getServer().getPluginManager().disablePlugin(plugin);
+		}
 	}
-	
+
+	public boolean initDB() {
+		try {
+			if (conn == null || !conn.isValid(0)) { // Does the connection exist? Is it active?
+				// Connect to the database
+				conn = DriverManager.getConnection(
+						plugin.getConfig().getString("AraeosiaChat.database.url"),
+						plugin.getConfig().getString("AraeosiaChat.database.user"),
+						plugin.getConfig().getString("AraeosiaChat.database.password"));
+				if (!conn.isValid(0)) { // check if the connection is now valid
+					return false;
+				}
+			}
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	public ArrayList<Channel> getChannels(String playerName){
+		PreparedStatement query = conn.prepareStatement
+	}
+	public Channel getMainChannel(String playerName){
+		
+	}
 }
