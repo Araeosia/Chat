@@ -24,19 +24,35 @@ public class Database {
 		table1name = plugin.getConfig().getString("AraeosiaChat.database.table1");
 		table2name = plugin.getConfig().getString("AraeosiaChat.database.table2");
 	}
-	
-	public void handlePlayerJoin(String playerName){
+
+	public void handlePlayerJoin(String playerName) {
 		initDB();
 		try {
-			PreparedStatement s = conn.prepareStatement("SELECT * FROM "+table1name + " WHERE name=?");
+			PreparedStatement s = conn.prepareStatement("SELECT * FROM " + table1name + " WHERE name=? AND type='1'");
 			s.setString(1, playerName);
 			ResultSet rs = s.executeQuery();
-			if(!rs.next()){
-				PreparedStatement s2 = conn.prepareStatement("INSERT INTO "+table1name+" (name, channel, type) VALUES (?, 'A', '1')");
+			if (!rs.next()) {
+				PreparedStatement s2 = conn.prepareStatement("INSERT INTO " + table1name + " (name, channel, type) VALUES (?, 'A', '1')");
 				s2.setString(1, playerName);
 				s2.executeUpdate();
+				Chatter cha = new Chatter(plugin, playerName);
+				cha.setChannel(plugin.getChannel("A"));
+				plugin.chatters.add(cha);
+			} else {
+				Chatter cha = new Chatter(plugin, playerName);
+				cha.setChannel(plugin.getChannel(rs.getString("channel")));
+				ArrayList<Channel> channels = new ArrayList<>();
+				PreparedStatement s2 = conn.prepareStatement("SELECT * FROM " + table1name + " WHERE name=? AND type='2'");
+				s2.setString(1, playerName);
+				ResultSet rs2 = s2.executeQuery();
+				while (rs2.next()) {
+					Channel toAdd = plugin.getChannel(rs2.getString("channel"));
+					channels.add(toAdd);
+				}
+				cha.setChannels(channels);
+				plugin.chatters.add(cha);
 			}
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -67,7 +83,7 @@ public class Database {
 			PreparedStatement query = conn.prepareStatement("SELECT * FROM " + table1name + " WHERE name=? AND type=2");
 			query.setString(1, playerName);
 			ResultSet result = query.executeQuery();
-			while(result.next()){
+			while (result.next()) {
 				output.add(plugin.getChannel(result.getString("channel")));
 			}
 		} catch (SQLException e) {
@@ -83,23 +99,23 @@ public class Database {
 			query.setString(1, playerName);
 			ResultSet result = query.executeQuery();
 			return plugin.getChannel(result.getString("channel"));
-		}catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	public ArrayList<String> getMutes(Channel channel){
+
+	public ArrayList<String> getMutes(Channel channel) {
 		initDB();
 		ArrayList<String> output = new ArrayList<>();
-		try{
+		try {
 			PreparedStatement query = conn.prepareStatement("SELECT * FROM " + table2name + " WHERE channel=? OR channel='allchan'");
 			query.setString(1, channel.getName());
 			ResultSet result = query.executeQuery();
-			while(result.next()){
+			while (result.next()) {
 				output.add(result.getString("name"));
 			}
-		}catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return output;

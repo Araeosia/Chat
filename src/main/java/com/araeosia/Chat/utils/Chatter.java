@@ -1,15 +1,19 @@
 package com.araeosia.Chat.utils;
 
+import com.araeosia.Chat.AraeosiaChat;
 import java.util.ArrayList;
+import org.bukkit.entity.Player;
 
 public class Chatter {
+	private AraeosiaChat plugin;
 	private String name;
 	private Channel currentChannel;
 	private ArrayList<Channel> channels;
 	private boolean gMuted;
 	private ArrayList<Channel> mutes;
 	
-	public Chatter(String name){
+	public Chatter(AraeosiaChat plugin, String name){
+		this.plugin = plugin;
 		this.name = name;
 		channels = new ArrayList<>();
 		mutes = new ArrayList<>();
@@ -27,7 +31,17 @@ public class Chatter {
 		return currentChannel;
 	}
 	public String getDisplayName(){
-		return name;
+		if(getPlayer().hasPermission("AraeosiaChat.admin")){
+			return "§4"+name;
+		}else if(getPlayer().hasPermission("AraeosiaChat.moderator")){
+			return "§a"+name;
+		}else if(getPlayer().hasPermission("AraeosiaChat.veteran")){
+			return "§2"+name;
+		}else if(getPlayer().hasPermission("AraeosiaChat.default")){
+			return "§b"+name;
+		}else{
+			return name;
+		}
 	}
 	public void setGMuted(boolean gMuted){
 		this.gMuted = gMuted;
@@ -74,5 +88,8 @@ public class Chatter {
 			return true;
 		}
 		return false;
+	}
+	private Player getPlayer(){
+		return plugin.getServer().getPlayer(name);
 	}
 }
