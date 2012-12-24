@@ -29,10 +29,10 @@ public class ChatListener implements Listener, CommandExecutor {
 
 	@EventHandler
 	public void onPlayerLeave(final PlayerQuitEvent event) {
+		plugin.bot.sendMessage(plugin.formatMessage(MsgType.LEAVE, event.getPlayer(), plugin.serverName, plugin.getChatter(event.getPlayer().getName()).getCurrentChannel()));
 		if(plugin.chatters.contains(plugin.getChatter(event.getPlayer().getName()))){
 			plugin.chatters.remove(plugin.getChatter(event.getPlayer().getName()));
 		}
-		plugin.bot.sendMessage(plugin.formatMessage(MsgType.LEAVE, event.getPlayer(), plugin.serverName, plugin.getChatter(event.getPlayer().getName()).getCurrentChannel()));
 	}
 
 	@Override

@@ -26,6 +26,7 @@ public class AraeosiaChat extends JavaPlugin {
 	public Database database;
 	public ArrayList<Channel> channels = new ArrayList<Channel>();
 	public ArrayList<Chatter> chatters = new ArrayList<Chatter>();
+	public HashMap<String, ArrayList<String>> allChatters = new HashMap<>();
 
 	@Override
 	public void onEnable() {
@@ -84,9 +85,21 @@ public class AraeosiaChat extends JavaPlugin {
 				break;
 			case JOIN:
 				output = "§e" + args[1].replace("∞", "§") + " joined " + args[2] + " on " + args[3];
+				if(allChatters.get(args[3])==null){
+					allChatters.put(args[3], new ArrayList<String>());
+				}
+				if(!allChatters.get(args[3]).contains(args[1])){
+					allChatters.get(args[3]).add(args[1]);
+				}
 				break;
 			case LEAVE:
 				output = "§e" + args[1].replace("∞", "§") + " left " + args[2] + " on " + args[3];
+				if(allChatters.get(args[3])==null){
+					allChatters.put(args[3], new ArrayList<String>());
+				}
+				if(allChatters.get(args[3]).contains(args[1])){
+					allChatters.get(args[3]).remove(args[1]);
+				}
 				break;
 		}
 		switch (type) {
