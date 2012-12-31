@@ -1,22 +1,22 @@
 package com.araeosia.Chat.utils;
 
-import com.araeosia.Chat.AraeosiaChat;
 import java.util.ArrayList;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Chatter {
-	private AraeosiaChat plugin;
 	private String name;
 	private Channel currentChannel;
 	private ArrayList<Channel> channels;
 	private boolean gMuted;
 	private ArrayList<Channel> mutes;
+	private Style style;
 	
-	public Chatter(AraeosiaChat plugin, String name){
-		this.plugin = plugin;
+	public Chatter(String name, Style style){
 		this.name = name;
 		channels = new ArrayList<>();
 		mutes = new ArrayList<>();
+		this.style = style;
 	}
 	public String getName() {
 		return name;
@@ -89,7 +89,13 @@ public class Chatter {
 		}
 		return false;
 	}
-	private Player getPlayer(){
-		return plugin.getServer().getPlayer(name);
+	public Player getPlayer(){
+		return Bukkit.getServer().getPlayer(name);
+	}
+	public Style getStyle(){
+		return style;
+	}
+	public void setStyle(Style s){
+		this.style = s;
 	}
 }

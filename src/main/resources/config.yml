@@ -1,0 +1,56 @@
+AraeosiaChat:
+  network:
+    port: 6667
+    host: irc.esper.net
+  account:
+    nick: MCChatLink
+    identify: false
+    identifyPass: ""
+  technical:
+    version: 0.1
+    debug: false
+    compressOutput: false
+    serverName: Freebuild
+  channels:
+    0:
+      prefix: "e"
+      abbreviation: "A"
+      name: "Araeosia"
+      isPrivate: false
+      isStaff: false
+      isLeaveable: true
+    1:
+      prefix: "b"
+      abbreviation: "S"
+      name: "Staff"
+      isPrivate: true
+      isStaff: true
+      isLeaveable: true
+    2:
+      prefix: "c"
+      abbreviation: "W"
+      name: "World"
+      isPrivate: false
+      isStaff: false
+      isLeaveable: true
+    3:
+      prefix: "d"
+      abbreviation: "L"
+      name: "Local"
+      isPrivate: false
+      isStaff: false
+      isLeaveable: true
+    4:
+      prefix: "5"
+      abbreviation: "T"
+      name: "Trade"
+      isPrivate: false
+      isStaff: false
+      isLeaveable: true
+    5:
+      prefix: "4"
+      abbreviation: "G"
+      name: "Global"
+      isPrivate: true
+      isStaff: false
+      isLeaveable: false

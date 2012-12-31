@@ -35,11 +35,11 @@ public class Database {
 				PreparedStatement s2 = conn.prepareStatement("INSERT INTO " + table1name + " (name, channel, type) VALUES (?, 'A', '1')");
 				s2.setString(1, playerName);
 				s2.executeUpdate();
-				Chatter cha = new Chatter(plugin, playerName);
+				Chatter cha = new Chatter(playerName, Style.valueOf(rs.getString("style")));
 				cha.setChannel(plugin.getChannel("A"));
 				plugin.chatters.add(cha);
 			} else {
-				Chatter cha = new Chatter(plugin, playerName);
+				Chatter cha = new Chatter(playerName, Style.A);
 				cha.setChannel(plugin.getChannel(rs.getString("channel")));
 				ArrayList<Channel> channels = new ArrayList<>();
 				PreparedStatement s2 = conn.prepareStatement("SELECT * FROM " + table1name + " WHERE name=? AND type='2'");

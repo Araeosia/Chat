@@ -27,6 +27,7 @@ public class AraeosiaChat extends JavaPlugin {
 	public ArrayList<Channel> channels = new ArrayList<Channel>();
 	public ArrayList<Chatter> chatters = new ArrayList<Chatter>();
 	public HashMap<String, ArrayList<String>> allChatters = new HashMap<>();
+	private ChatListener listener;
 
 	@Override
 	public void onEnable() {
@@ -34,7 +35,9 @@ public class AraeosiaChat extends JavaPlugin {
 		database = new Database(this);
 		database.initDB();
 		bot = new IRCBot(this);
-		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+		listener = new ChatListener(this);
+		getServer().getPluginManager().registerEvents(listener, this);
+		getCommand("ch").setExecutor(listener);
 	}
 
 	@Override
@@ -49,15 +52,16 @@ public class AraeosiaChat extends JavaPlugin {
 		}
 	}
 
-	public String formatMessage(MsgType type, Player player, String message, Channel channel) {
+	public String formatMessage(MsgType type, String message, Chatter chatter) {
 		// todo chat channels and stuff
+		Player player = chatter.getPlayer();
 		switch (type) {
 			case MESSAGE:
 			case EMOTE:
 				return type.toString()
 						+ "§" + getChatter(player.getName()).getDisplayName().replace("§", "∞")
 						+ "§" + player.getWorld().getName()
-						+ "§" + channel.getName()
+						+ "§" + chatter.getCurrentChannel().getName()
 						+ "§" + message;
 			case JOIN:
 			case LEAVE:
@@ -67,69 +71,6 @@ public class AraeosiaChat extends JavaPlugin {
 						+ "§" + message;
 		}
 		return "";
-	}
-
-	public void handleMessage(String message) {
-		String[] args = message.split("§");
-		String output = "";
-		MsgType type = MsgType.valueOf(args[0]);
-		Channel chan = null;
-		switch (type) {
-			case MESSAGE:
-				chan = getChannel(args[3]);
-				output = "§" + chan.getPrefix() + "[" + chan.getAbbreviation() + "]§f " + args[1].replace("∞", "§") + "§f: " + args[4];
-				break;
-			case EMOTE:
-				chan = getChannel(args[3]);
-				output = "§" + chan.getPrefix() + "[" + chan.getAbbreviation() + "]§f * " + args[1].replace("∞", "§") + " " + args[4];
-				break;
-			case JOIN:
-				output = "§e" + args[1].replace("∞", "§") + " joined " + args[2] + " on " + args[3];
-				if(allChatters.get(args[3])==null){
-					allChatters.put(args[3], new ArrayList<String>());
-				}
-				if(!allChatters.get(args[3]).contains(args[1])){
-					allChatters.get(args[3]).add(args[1]);
-				}
-				break;
-			case LEAVE:
-				output = "§e" + args[1].replace("∞", "§") + " left " + args[2] + " on " + args[3];
-				if(allChatters.get(args[3])==null){
-					allChatters.put(args[3], new ArrayList<String>());
-				}
-				if(allChatters.get(args[3]).contains(args[1])){
-					allChatters.get(args[3]).remove(args[1]);
-				}
-				break;
-		}
-		switch (type) {
-			case MESSAGE:
-			case EMOTE:
-				for (Chatter cha : chatters) {
-					if (cha.isInChannel(chan)) {
-						getPlayer(cha).sendMessage(output);
-					}
-				}
-				break;
-			case JOIN:
-			case LEAVE:
-				for (Player p : getServer().getOnlinePlayers()) {
-					p.sendMessage(output);
-				}
-				break;
-		}
-	}
-
-	public void handleLocalMessage(Player player, String message, boolean emote, Channel channel) {
-		for (Chatter cha : chatters) {
-			if (cha.isInChannel(channel)) {
-				if (emote) {
-					getPlayer(cha).sendMessage("§" + channel.getPrefix() + "[" + channel.getAbbreviation() + "]§f " + this.getChatter(player.getName()).getDisplayName() + " §f: " + message);
-				} else {
-					getPlayer(cha).sendMessage("§" + channel.getPrefix() + "[" + channel.getAbbreviation() + "]§f * " + this.getChatter(player.getName()).getDisplayName() + " " + message);
-				}
-			}
-		}
 	}
 
 	public void loadConfiguration() {
@@ -194,6 +135,27 @@ public class AraeosiaChat extends JavaPlugin {
 
 	public Player getPlayer(Chatter cha) {
 		return getServer().getPlayer(cha.getName());
+	}
+	
+	public void handleLocalMessage(MsgType type, String message, Chatter chatter){
+		for(Chatter cha : chatters){
+			if(cha.isInChannel(chatter.getCurrentChannel())){
+				cha.getStyle().handleMessage(message, cha);
+			}
+		}
+	}
+	
+	public void handleRemoteMessage(String input){
+		String[] args = input.split("§");
+		AraeosiaChat.MsgType type = AraeosiaChat.MsgType.valueOf(args[0]);
+		if(type.equals(MsgType.JOIN) || type.equals(MsgType.LEAVE)){
+			for(Chatter cha : chatters){
+				Channel chan = getChannel(args[4]);
+				if(cha.isInChannel(chan)){
+					cha.getStyle().handleMessage(input, cha);
+				}
+			}
+		}
 	}
 
 	public enum MsgType {
