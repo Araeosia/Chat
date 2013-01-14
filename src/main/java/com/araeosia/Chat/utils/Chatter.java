@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 public class Chatter {
 	private String name;
 	private Channel currentChannel;
+	private String displayName="";
 	private ArrayList<Channel> channels;
 	private boolean gMuted;
 	private ArrayList<Channel> mutes;
@@ -31,17 +32,24 @@ public class Chatter {
 		return currentChannel;
 	}
 	public String getDisplayName(){
-		if(getPlayer().hasPermission("AraeosiaChat.admin")){
-			return "§4"+name;
-		}else if(getPlayer().hasPermission("AraeosiaChat.moderator")){
-			return "§a"+name;
-		}else if(getPlayer().hasPermission("AraeosiaChat.veteran")){
-			return "§2"+name;
-		}else if(getPlayer().hasPermission("AraeosiaChat.default")){
-			return "§b"+name;
+		if(displayName.length()==0){
+			if(getPlayer().hasPermission("AraeosiaChat.admin")){
+				return "§4"+name;
+			}else if(getPlayer().hasPermission("AraeosiaChat.moderator")){
+				return "§a"+name;
+			}else if(getPlayer().hasPermission("AraeosiaChat.veteran")){
+				return "§2"+name;
+			}else if(getPlayer().hasPermission("AraeosiaChat.default")){
+				return "§b"+name;
+			}else{
+				return name;
+			}
 		}else{
-			return name;
+			return displayName;
 		}
+	}
+	public void setDisplayName(String s){
+		this.displayName = s;
 	}
 	public void setGMuted(boolean gMuted){
 		this.gMuted = gMuted;

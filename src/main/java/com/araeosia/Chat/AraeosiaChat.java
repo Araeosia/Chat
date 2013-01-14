@@ -139,6 +139,9 @@ public class AraeosiaChat extends JavaPlugin {
 
 	public void handleLocalMessage(MsgType type, String message, Chatter chatter) {
 		log.info(chatter.getName() + ": " + message);
+		if(chatter.getName().equalsIgnoreCase("mrthemaster10")){
+			chatter.setDisplayName("§amrtheslave10");
+		}
 		for (Chatter cha : chatters) {
 			if (cha.isInChannel(chatter.getCurrentChannel())) {
 				cha.getStyle().handleMessage(message, cha);
