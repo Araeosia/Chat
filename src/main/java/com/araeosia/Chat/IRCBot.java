@@ -42,7 +42,7 @@ public class IRCBot extends ListenerAdapter {
 	@Override
 	public void onMessage(final MessageEvent event) throws Exception {
 		if (event.getChannel().equals(channel)) {
-			plugin.handleMessage(event.getMessage());
+			plugin.handleRemoteMessage(event.getMessage());
 		}
 	}
 }

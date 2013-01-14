@@ -136,22 +136,24 @@ public class AraeosiaChat extends JavaPlugin {
 	public Player getPlayer(Chatter cha) {
 		return getServer().getPlayer(cha.getName());
 	}
-	
-	public void handleLocalMessage(MsgType type, String message, Chatter chatter){
-		for(Chatter cha : chatters){
-			if(cha.isInChannel(chatter.getCurrentChannel())){
+
+	public void handleLocalMessage(MsgType type, String message, Chatter chatter) {
+		log.info(chatter.getName() + ": " + message);
+		for (Chatter cha : chatters) {
+			if (cha.isInChannel(chatter.getCurrentChannel())) {
 				cha.getStyle().handleMessage(message, cha);
 			}
 		}
 	}
-	
-	public void handleRemoteMessage(String input){
+
+	public void handleRemoteMessage(String input) {
+		log.info(input);
 		String[] args = input.split("§");
 		AraeosiaChat.MsgType type = AraeosiaChat.MsgType.valueOf(args[0]);
-		if(type.equals(MsgType.JOIN) || type.equals(MsgType.LEAVE)){
-			for(Chatter cha : chatters){
+		if (type.equals(MsgType.JOIN) || type.equals(MsgType.LEAVE)) {
+			for (Chatter cha : chatters) {
 				Channel chan = getChannel(args[4]);
-				if(cha.isInChannel(chan)){
+				if (cha.isInChannel(chan)) {
 					cha.getStyle().handleMessage(input, cha);
 				}
 			}

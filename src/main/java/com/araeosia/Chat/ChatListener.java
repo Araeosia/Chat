@@ -3,6 +3,7 @@ package com.araeosia.Chat;
 import com.araeosia.Chat.AraeosiaChat.MsgType;
 import com.araeosia.Chat.utils.Channel;
 import com.araeosia.Chat.utils.Chatter;
+import com.araeosia.Chat.utils.Style;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -38,13 +39,27 @@ public class ChatListener implements Listener, CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String commandLabel, String[] args) {
+		Chatter chatter=null;
+		if(cs instanceof Player){
+			chatter = plugin.getChatter(cs.getName());
+		}
 		if (cmd.getName().equalsIgnoreCase("ch")) {
 			if(args.length==0 || args[0].equalsIgnoreCase("help")){
 				sendHelp(cs);
 			}else if(args[0].equalsIgnoreCase("style")){
-				
+				if(args.length==2){
+					try{
+						Style style = Style.valueOf(args[1]);
+						chatter.setStyle(style);
+						plugin.database.setStyle(cs.getName(), style);
+					}catch(IllegalArgumentException e){
+						cs.sendMessage("Could not find a style by that ID. /ch styles for list.");
+					}
+				}else{
+					sendHelp(cs);
+				}
 			}else if(args[0].equalsIgnoreCase("styles")){
-				
+				cs.sendMessage("Sorry, not done yet. Styles are: A, B, C, D, E, F");
 			}else if(args[0].equalsIgnoreCase("join")){
 				
 			}else if(args[0].equalsIgnoreCase("leave")){

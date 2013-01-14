@@ -18,6 +18,10 @@ public enum Style {
 		return "Style "+super.toString();
 	}
 	
+	public String techString(){
+		return super.toString();
+	}
+	
 	public void handleMessage(String input, Chatter chatter){
 		String[] args = input.split("§");
 		AraeosiaChat.MsgType type = AraeosiaChat.MsgType.valueOf(args[0]);
