@@ -29,15 +29,15 @@ public enum Style {
 		switch(type){
 			case MESSAGE:
 			case EMOTE:
-				handleMessage(playerName, chatter.getCurrentChannel(), args[4], args[2], type, chatter);
+				handleFullMessage(playerName, chatter.getCurrentChannel(), args[4], args[2], type, chatter);
 				break;
 			case JOIN:
 			case LEAVE:
-				handleMessage(playerName, null, args[3], args[2], type, chatter);
+				handleFullMessage(playerName, null, args[3], args[2], type, chatter);
 				break;
 		}
 	}
-	public void handleMessage(String playerName, Channel chan, String message, String world, MsgType type, Chatter chatter){
+	public void handleFullMessage(String playerName, Channel chan, String message, String world, MsgType type, Chatter chatter){
 		AraeosiaChat plugin = (AraeosiaChat) Bukkit.getServer().getPluginManager().getPlugin("AraeosiaChat");
 		String output = "";
 		Calendar cal = Calendar.getInstance();

@@ -144,7 +144,7 @@ public class AraeosiaChat extends JavaPlugin {
 		}
 		for (Chatter cha : chatters) {
 			if (cha.isInChannel(chatter.getCurrentChannel())) {
-				cha.getStyle().handleMessage(message, cha);
+				cha.getStyle().handleFullMessage(chatter.getDisplayName(), chatter.getCurrentChannel(), message, chatter.getPlayer().getWorld().getName(), type, chatter);
 			}
 		}
 	}
